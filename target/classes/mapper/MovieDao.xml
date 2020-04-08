@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crawler.dao.MovieDao">
+
+    <resultMap type="com.crawler.entity.Movie" id="MovieMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="starring" column="starring" jdbcType="VARCHAR"/>
+        <result property="director" column="director" jdbcType="VARCHAR"/>
+        <result property="year" column="year" jdbcType="TIMESTAMP"/>
+        <result property="area" column="area" jdbcType="VARCHAR"/>
+        <result property="synopsis" column="synopsis" jdbcType="VARCHAR"/>
+        <result property="imgpath" column="imgPath" jdbcType="VARCHAR"/>
+        <result property="moviepath" column="moviePath" jdbcType="VARCHAR"/>
+        <result property="playernum" column="playerNum" jdbcType="INTEGER"/>
+        <result property="carousel" column="carousel" jdbcType="BOOLEAN"/>
+        <result property="carouselimg" column="carouselImg" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="MovieMap">
+        select
+          id, name, starring, director, year, area, synopsis, imgPath, moviePath, playerNum, carousel, carouselImg
+        from movie.movie
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="MovieMap">
+        select
+          id, name, starring, director, year, area, synopsis, imgPath, moviePath, playerNum, carousel, carouselImg
+        from movie.movie
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="MovieMap">
+        select
+          id, name, starring, director, year, area, synopsis, imgPath, moviePath, playerNum, carousel, carouselImg
+        from movie.movie
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="starring != null and starring != ''">
+                and starring = #{starring}
+            </if>
+            <if test="director != null and director != ''">
+                and director = #{director}
+            </if>
+            <if test="year != null">
+                and year = #{year}
+            </if>
+            <if test="area != null and area != ''">
+                and area = #{area}
+            </if>
+            <if test="synopsis != null and synopsis != ''">
+                and synopsis = #{synopsis}
+            </if>
+            <if test="imgpath != null and imgpath != ''">
+                and imgPath = #{imgpath}
+            </if>
+            <if test="moviepath != null and moviepath != ''">
+                and moviePath = #{moviepath}
+            </if>
+            <if test="playernum != null">
+                and playerNum = #{playernum}
+            </if>
+            <if test="carousel != null">
+                and carousel = #{carousel}
+            </if>
+            <if test="carouselimg != null and carouselimg != ''">
+                and carouselImg = #{carouselimg}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into movie.movie(name, starring, director, year, area, synopsis, imgPath, moviePath, playerNum, carousel, carouselImg)
+        values (#{name}, #{starring}, #{director}, #{year}, #{area}, #{synopsis}, #{imgpath}, #{moviepath}, #{playernum}, #{carousel}, #{carouselimg})
+    </insert>
+
+    <!--新增所有列-->
+    <insert id="insertMovieType">
+        insert into movie.movieType(movieId, typeId)
+        values (#{movieId},#{typeId})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update movie.movie
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="starring != null and starring != ''">
+                starring = #{starring},
+            </if>
+            <if test="director != null and director != ''">
+                director = #{director},
+            </if>
+            <if test="year != null">
+                year = #{year},
+            </if>
+            <if test="area != null and area != ''">
+                area = #{area},
+            </if>
+            <if test="synopsis != null and synopsis != ''">
+                synopsis = #{synopsis},
+            </if>
+            <if test="imgpath != null and imgpath != ''">
+                imgPath = #{imgpath},
+            </if>
+            <if test="moviepath != null and moviepath != ''">
+                moviePath = #{moviepath},
+            </if>
+            <if test="playernum != null">
+                playerNum = #{playernum},
+            </if>
+            <if test="carousel != null">
+                carousel = #{carousel},
+            </if>
+            <if test="carouselimg != null and carouselimg != ''">
+                carouselImg = #{carouselimg},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from movie.movie where id = #{id}
+    </delete>
+
+</mapper>
